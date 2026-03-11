@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador e Video</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <main class="page">
+        <section class="countdown-panel" aria-live="polite">
+            <p class="label">O video inicia em</p>
+            <h1 id="countdown" class="countdown">10</h1>
+            <p id="status" class="status">Preparando a reproducao...</p>
+        </section>
+
+        <section id="videoWrapper" class="video-wrapper is-hidden">
+            <video
+                id="player"
+                class="video-player"
+                preload="auto"
+                playsinline
+                muted
+            >
+                <source src="./file_example_MP4_1920_18MG.mp4" type="video/mp4">
+                Seu navegador nao suporta a reproducao de video.
+            </video>
+            <div id="videoMessage" class="video-message"></div>
+        </section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>

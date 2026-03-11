@@ -1,0 +1,92 @@
+const countdownElement = document.getElementById("countdown");
+const statusElement = document.getElementById("status");
+const videoWrapper = document.getElementById("videoWrapper");
+const videoMessageElement = document.getElementById("videoMessage");
+const player = document.getElementById("player");
+
+const initialVideoPath = "./file_example_MP4_1920_18MG.mp4";
+const missingVideoPath = "./video_que_nao_existe.mp4";
+
+let remainingSeconds = 10;
+
+function setStatus(message, showOnVideo = false) {
+    statusElement.textContent = message;
+    videoMessageElement.textContent = showOnVideo ? message : "";
+}
+
+function formatRemainingTime(totalSeconds) {
+    const safeSeconds = Math.max(0, Math.ceil(totalSeconds));
+    const minutes = String(Math.floor(safeSeconds / 60)).padStart(2, "0");
+    const seconds = String(safeSeconds % 60).padStart(2, "0");
+
+    return `${minutes}:${seconds}`;
+}
+
+function updateVideoRemainingTime() {
+    if (!Number.isFinite(player.duration) || player.currentSrc.includes("video_que_nao_existe.mp4")) {
+        return;
+    }
+
+    const remainingTime = player.duration - player.currentTime;
+    setStatus(`Tempo restante: ${formatRemainingTime(remainingTime)}`, true);
+}
+
+function updateCountdown() {
+    countdownElement.textContent = String(remainingSeconds);
+}
+
+async function openFullscreen(target) {
+    if (!document.fullscreenElement && target.requestFullscreen) {
+        try {
+            await target.requestFullscreen();
+        } catch (error) {
+            setStatus("Nao foi possivel entrar em tela cheia automaticamente.", true);
+        }
+    }
+}
+
+async function playMainVideo() {
+    setStatus("Carregando video...", true);
+    videoWrapper.classList.remove("is-hidden");
+
+    player.src = initialVideoPath;
+    player.load();
+
+    await openFullscreen(videoWrapper);
+
+    try {
+        await player.play();
+        updateVideoRemainingTime();
+    } catch (error) {
+        setStatus("O navegador bloqueou a reproducao automatica do video.", true);
+    }
+}
+
+function tryMissingVideo() {
+    setStatus("", false);
+    player.src = missingVideoPath;
+    player.load();
+    player.play().catch(() => {});
+}
+
+player.addEventListener("ended", () => {
+    tryMissingVideo();
+});
+
+player.addEventListener("loadedmetadata", updateVideoRemainingTime);
+player.addEventListener("timeupdate", updateVideoRemainingTime);
+
+updateCountdown();
+
+const countdownInterval = window.setInterval(() => {
+    remainingSeconds -= 1;
+
+    if (remainingSeconds <= 0) {
+        countdownElement.textContent = "0";
+        window.clearInterval(countdownInterval);
+        playMainVideo();
+        return;
+    }
+
+    updateCountdown();
+}, 1000);
