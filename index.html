@@ -8,24 +8,14 @@
 </head>
 <body>
     <main class="page">
-        <section class="countdown-panel" aria-live="polite">
-            <p class="label">O video inicia em</p>
+        <section id="countdownPanel" class="countdown-panel" aria-live="polite">
+            <p class="label">Contagem regressiva</p>
             <h1 id="countdown" class="countdown">10</h1>
-            <p id="status" class="status">Preparando a reproducao...</p>
+            <p id="status" class="status">Preparando...</p>
         </section>
 
-        <section id="videoWrapper" class="video-wrapper is-hidden">
-            <video
-                id="player"
-                class="video-player"
-                preload="auto"
-                playsinline
-                muted
-            >
-                <source src="./file_example_MP4_1920_1MG.mp4" type="video/mp4">
-                Seu navegador nao suporta a reproducao de video.
-            </video>
-            <div id="videoMessage" class="video-message"></div>
+        <section id="renderWrapper" class="render-wrapper is-hidden" aria-hidden="true">
+            <iframe id="pageFrame" class="page-frame" src="about:blank" title="Renderizacao de arquivo"></iframe>
         </section>
     </main>
 

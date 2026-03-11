@@ -68,7 +68,7 @@ body {
     color: var(--status);
 }
 
-.video-wrapper {
+.render-wrapper {
     position: fixed;
     inset: 0;
     background: #000;
@@ -77,31 +77,11 @@ body {
     z-index: 10;
 }
 
-.video-player {
+.page-frame {
     width: 100vw;
     height: 100vh;
-    object-fit: cover;
     background: #000;
-}
-
-.video-message {
-    position: absolute;
-    left: 50%;
-    bottom: 2rem;
-    transform: translateX(-50%);
-    width: min(92vw, 720px);
-    padding: 0.9rem 1.1rem;
-    border-radius: 14px;
-    text-align: center;
-    font-size: 0.95rem;
-    color: var(--text);
-    background: rgba(0, 0, 0, 0.52);
-    border: 1px solid rgba(255, 255, 255, 0.14);
-    backdrop-filter: blur(10px);
-}
-
-.video-message:empty {
-    display: none;
+    border: 0;
 }
 
 .is-hidden {
