@@ -4,8 +4,7 @@ const videoWrapper = document.getElementById("videoWrapper");
 const videoMessageElement = document.getElementById("videoMessage");
 const player = document.getElementById("player");
 
-const initialVideoPath = "./file_example_MP4_1920_18MG.mp4";
-const missingVideoPath = "./video_que_nao_existe.mp4";
+const initialVideoPath = "./file_example_MP4_1920_1MG.mp4";
 
 let remainingSeconds = 10;
 
@@ -23,10 +22,6 @@ function formatRemainingTime(totalSeconds) {
 }
 
 function updateVideoRemainingTime() {
-    if (!Number.isFinite(player.duration) || player.currentSrc.includes("video_que_nao_existe.mp4")) {
-        return;
-    }
-
     const remainingTime = player.duration - player.currentTime;
     setStatus(`Tempo restante: ${formatRemainingTime(remainingTime)}`, true);
 }
@@ -37,11 +32,7 @@ function updateCountdown() {
 
 async function openFullscreen(target) {
     if (!document.fullscreenElement && target.requestFullscreen) {
-        try {
-            await target.requestFullscreen();
-        } catch (error) {
-            setStatus("Nao foi possivel entrar em tela cheia automaticamente.", true);
-        }
+        await target.requestFullscreen();
     }
 }
 
@@ -54,24 +45,9 @@ async function playMainVideo() {
 
     await openFullscreen(videoWrapper);
 
-    try {
-        await player.play();
-        updateVideoRemainingTime();
-    } catch (error) {
-        setStatus("O navegador bloqueou a reproducao automatica do video.", true);
-    }
+    await player.play();
+    updateVideoRemainingTime();
 }
-
-function tryMissingVideo() {
-    setStatus("", false);
-    player.src = missingVideoPath;
-    player.load();
-    player.play().catch(() => {});
-}
-
-player.addEventListener("ended", () => {
-    tryMissingVideo();
-});
 
 player.addEventListener("loadedmetadata", updateVideoRemainingTime);
 player.addEventListener("timeupdate", updateVideoRemainingTime);
